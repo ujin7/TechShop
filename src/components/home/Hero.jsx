@@ -50,7 +50,8 @@ export default function Hero() {
             </h1>
 
             <p className={`${styles.description} animate-fadeInUp`} style={{ animationDelay: '0.18s' }}>
-              복잡한 비교는 덜어내고, 눈에 잘 들어오는 구성으로 인기 제품만 빠르게 살펴보세요.
+              복잡한 비교는 덜어내고, 눈에 잘 들어오는 구성으로 인기 제품 빠르게 살펴보세요.
+              <br />
               탐색부터 비교, 구매 결정까지 더 자연스럽게 이어집니다.
             </p>
           </div>
@@ -69,9 +70,9 @@ export default function Hero() {
           </div>
 
           <div className={`${styles.metrics} animate-fadeInUp`} style={{ animationDelay: '0.34s' }}>
-            <div className={styles.metricCard}>
-              <span className={styles.metricValue}>100+</span>
-              <span className={styles.metricLabel}>큐레이션 상품</span>
+            <div className={`${styles.metricCard} ${styles.metricCardCopy}`}>
+              <span className={styles.metricCopyTitle}>엄선된</span>
+              <span className={styles.metricCopyText}>인기 제품</span>
             </div>
             <div className={styles.metricCard}>
               <span className={styles.metricValue}>4.9</span>

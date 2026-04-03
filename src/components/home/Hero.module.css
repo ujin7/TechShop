@@ -134,6 +134,11 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(10px);
+  min-height: 132px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .metricValue {
@@ -148,6 +153,24 @@
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.83rem;
   line-height: 1.5;
+}
+
+.metricCardCopy {
+  gap: 4px;
+}
+
+.metricCopyTitle {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.metricCopyText {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .trustBadges {
