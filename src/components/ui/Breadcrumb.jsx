@@ -21,6 +21,12 @@ export default function Breadcrumb({ items = [] }) {
             {!isLast && href ? (
               <Link
                 href={href}
+                onClick={(e) => {
+                  if (href === '/') {
+                    e.preventDefault();
+                    window.location.assign('/');
+                  }
+                }}
                 style={{
                   fontSize: '0.83rem',
                   color: 'var(--text-tertiary)',

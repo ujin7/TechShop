@@ -71,13 +71,18 @@ export default function Navbar({
     onLogout();
   };
 
+  const forceGoHome = useCallback((e) => {
+    e.preventDefault();
+    window.location.assign('/');
+  }, []);
+
   return (
     <>
       <header className={styles.navbar}>
         <div className={`app-container ${styles.navContainer}`}>
 
           {/* Logo */}
-          <Link href="/" className={styles.logo}>
+          <Link href="/" className={styles.logo} onClick={forceGoHome}>
             <Cpu className={styles.logoIcon} size={28} />
             <span>TECH<span className="text-gradient-cyan">SHOP</span></span>
           </Link>
@@ -212,7 +217,14 @@ export default function Navbar({
         <div className={styles.mobileOverlay} onClick={closeMobileMenu}>
           <nav className={styles.mobileDrawer} onClick={(e) => e.stopPropagation()}>
             <div className={styles.mobileHeader}>
-              <Link href="/" className={styles.logo} onClick={closeMobileMenu}>
+              <Link
+                href="/"
+                className={styles.logo}
+                onClick={(e) => {
+                  closeMobileMenu();
+                  forceGoHome(e);
+                }}
+              >
                 <Cpu size={22} />
                 <span>TECH<span className="text-gradient-cyan">SHOP</span></span>
               </Link>
