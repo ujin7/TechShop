@@ -71,7 +71,6 @@ export async function POST(request) {
 
     return tx.order.create({
       data: {
-        id: `ord_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         userId: authUserId,
         status: 'pending',
         items: JSON.stringify(items),

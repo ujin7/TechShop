@@ -36,7 +36,6 @@ export async function POST(request) {
     where: { userId_productId: { userId, productId } },
     update: {},
     create: {
-      id: `wl_${Date.now()}`,
       userId,
       productId,
     },

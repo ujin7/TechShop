@@ -62,7 +62,6 @@ export async function POST(request) {
   const review = await prisma.$transaction(async (tx) => {
     const created = await tx.review.create({
       data: {
-        id: `rev_${Date.now()}`,
         productId,
         userId: authUserId,
         userName: userName ?? '익명',
