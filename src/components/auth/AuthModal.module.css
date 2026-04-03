@@ -88,6 +88,15 @@
   padding: 0 var(--space-4);
 }
 
+.socialSection {
+  padding: 0 var(--space-8);
+  margin-bottom: var(--space-3);
+}
+
+.googleBtn {
+  width: 100%;
+}
+
 .tab {
   flex: 1;
   padding: var(--space-3) 0;

@@ -1,8 +1,22 @@
-'use client';
+﻿'use client';
 
 import { createContext, useContext, useEffect, useReducer } from 'react';
+import {
+  getSupabaseBrowserClient,
+  isSupabaseBrowserConfigured,
+} from '@/lib/supabase/client';
 
 export const AuthContext = createContext(null);
+
+function mapSupabaseUser(user) {
+  if (!user) return null;
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.user_metadata?.name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+    avatar: user.user_metadata?.avatar_url || null,
+  };
+}
 
 function authReducer(state, action) {
   switch (action.type) {
@@ -21,13 +35,24 @@ export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, { user: null, isLoading: true });
 
   useEffect(() => {
+    if (!isSupabaseBrowserConfigured()) {
+      dispatch({ type: 'CLEAR_USER' });
+      return;
+    }
+
+    const supabase = getSupabaseBrowserClient();
+    if (!supabase) {
+      dispatch({ type: 'CLEAR_USER' });
+      return;
+    }
+
     let cancelled = false;
+
     (async () => {
       try {
-        const res = await fetch('/api/auth/me', { cache: 'no-store' });
-        const json = await res.json();
+        const { data: { user } } = await supabase.auth.getUser();
         if (!cancelled) {
-          dispatch({ type: 'SET_USER', payload: json?.data ?? null });
+          dispatch({ type: 'SET_USER', payload: mapSupabaseUser(user) });
         }
       } catch {
         if (!cancelled) {
@@ -36,8 +61,14 @@ export function AuthProvider({ children }) {
       }
     })();
 
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (cancelled) return;
+      dispatch({ type: 'SET_USER', payload: mapSupabaseUser(session?.user ?? null) });
+    });
+
     return () => {
       cancelled = true;
+      authListener?.subscription?.unsubscribe();
     };
   }, []);
 

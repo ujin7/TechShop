@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { X, Mail, Lock, User, Loader2 } from 'lucide-react';
@@ -10,6 +10,7 @@ export default function AuthModal({
   onClose,
   onLogin,
   onSignup,
+  onGoogleLogin,
   isLoading = false,
   error = null,
 }) {
@@ -23,7 +24,6 @@ export default function AuthModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // 탭 전환 시 에러 초기화를 위해 부모에 알릴 필요 없이 자체 처리
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -60,9 +60,7 @@ export default function AuthModal({
             {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p className={styles.subtitle}>
-            {activeTab === 'login'
-              ? '프리미엄 테크 쇼퍼가 되어보세요.'
-              : '당신만의 테크 생태계를 구축하세요.'}
+            {activeTab === 'login' ? '이메일 또는 Google 계정으로 로그인하세요.' : '간단한 정보로 빠르게 가입하세요.'}
           </p>
         </div>
 
@@ -79,6 +77,19 @@ export default function AuthModal({
           >
             회원가입
           </button>
+        </div>
+
+        <div className={styles.socialSection}>
+          <Button
+            type="button"
+            variant="outline"
+            size="md"
+            disabled={isLoading}
+            className={styles.googleBtn}
+            onClick={() => onGoogleLogin?.()}
+          >
+            Google로 계속하기
+          </Button>
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit} key={activeTab}>
@@ -136,17 +147,7 @@ export default function AuthModal({
             )}
           </div>
 
-          {error && (
-            <div className={styles.errorBox}>
-              {error}
-            </div>
-          )}
-
-          {activeTab === 'login' && (
-            <p className={styles.demoHint}>
-              데모 계정: <strong>demo@techshop.kr</strong> / <strong>demo1234</strong>
-            </p>
-          )}
+          {error && <div className={styles.errorBox}>{error}</div>}
 
           <Button
             type="submit"
@@ -160,9 +161,8 @@ export default function AuthModal({
                 <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
                 처리 중...
               </span>
-            ) : activeTab === 'login' ? '로그인' : '회원가입'}
+            ) : activeTab === 'login' ? '이메일 로그인' : '이메일 회원가입'}
           </Button>
-
         </form>
       </div>
     </div>
