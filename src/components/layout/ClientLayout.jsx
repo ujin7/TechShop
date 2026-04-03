@@ -31,7 +31,7 @@ export default function ClientLayout({ children, categories }) {
     removeFromCart,
     updateQuantity,
   } = useCart();
-  const { user, login, signup, loginWithGoogle, logout, isLoading: authLoading, authError } = useAuth();
+  const { user, login, signup, logout, isLoading: authLoading, authError } = useAuth();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const handleUpdateQty = useCallback((productId, delta) => {
@@ -88,7 +88,6 @@ export default function ClientLayout({ children, categories }) {
         onClose={() => setIsAuthOpen(false)}
         onLogin={handleLogin}
         onSignup={handleSignup}
-        onGoogleLogin={loginWithGoogle}
         isLoading={authLoading}
         error={authError}
       />

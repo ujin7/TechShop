@@ -10,7 +10,6 @@ export default function AuthModal({
   onClose,
   onLogin,
   onSignup,
-  onGoogleLogin,
   isLoading = false,
   error = null,
 }) {
@@ -60,7 +59,7 @@ export default function AuthModal({
             {activeTab === 'login' ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p className={styles.subtitle}>
-            {activeTab === 'login' ? '이메일 또는 Google 계정으로 로그인하세요.' : '간단한 정보로 빠르게 가입하세요.'}
+            {activeTab === 'login' ? '이메일 계정으로 로그인하세요.' : '간단한 정보로 빠르게 가입하세요.'}
           </p>
         </div>
 
@@ -77,19 +76,6 @@ export default function AuthModal({
           >
             회원가입
           </button>
-        </div>
-
-        <div className={styles.socialSection}>
-          <Button
-            type="button"
-            variant="outline"
-            size="md"
-            disabled={isLoading}
-            className={styles.googleBtn}
-            onClick={() => onGoogleLogin?.()}
-          >
-            Google로 계속하기
-          </Button>
         </div>
 
         <form className={styles.form} onSubmit={handleSubmit} key={activeTab}>

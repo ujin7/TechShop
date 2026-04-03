@@ -92,6 +92,17 @@ export function useAuth() {
         return { success: false, message: msg };
       }
 
+      if (!data.session) {
+        const msg = '회원가입은 완료되었지만 아직 로그인 세션이 없습니다. Supabase 이메일 인증 설정을 확인한 뒤 다시 로그인해주세요.';
+        dispatch({ type: 'CLEAR_USER' });
+        setAuthError(msg);
+        return {
+          success: false,
+          requiresVerification: true,
+          message: msg,
+        };
+      }
+
       const sUser = data.user;
       dispatch({
         type: 'SET_USER',
@@ -107,7 +118,7 @@ export function useAuth() {
 
       return {
         success: true,
-        message: data.session ? null : '이메일 인증 후 로그인할 수 있습니다.',
+        message: null,
       };
     } catch {
       const msg = '회원가입 중 오류가 발생했습니다.';
@@ -117,38 +128,6 @@ export function useAuth() {
       setAuthLoading(false);
     }
   }, [dispatch, getClientOrError]);
-
-  const loginWithGoogle = useCallback(async () => {
-    setAuthLoading(true);
-    setAuthError(null);
-    try {
-      const supabase = getClientOrError();
-      if (!supabase) {
-        return { success: false, message: AUTH_NOT_CONFIGURED_MESSAGE };
-      }
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-
-      if (error) {
-        const msg = error.message || 'Google 로그인에 실패했습니다.';
-        setAuthError(msg);
-        return { success: false, message: msg };
-      }
-
-      return { success: true };
-    } catch {
-      const msg = 'Google 로그인 중 오류가 발생했습니다.';
-      setAuthError(msg);
-      return { success: false, message: msg };
-    } finally {
-      setAuthLoading(false);
-    }
-  }, [getClientOrError]);
 
   const logout = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
@@ -195,7 +174,6 @@ export function useAuth() {
     authError,
     login,
     signup,
-    loginWithGoogle,
     logout,
     updateProfile,
   };

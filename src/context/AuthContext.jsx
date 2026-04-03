@@ -50,9 +50,23 @@ export function AuthProvider({ children }) {
 
     (async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         if (!cancelled) {
-          dispatch({ type: 'SET_USER', payload: mapSupabaseUser(user) });
+          if (session?.user) {
+            dispatch({ type: 'SET_USER', payload: mapSupabaseUser(session.user) });
+            return;
+          }
+
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+
+          if (!cancelled) {
+            dispatch({ type: 'SET_USER', payload: mapSupabaseUser(user) });
+          }
         }
       } catch {
         if (!cancelled) {
