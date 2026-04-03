@@ -1,0 +1,223 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 요약 */
+.summary {
+  display: flex;
+  gap: 32px;
+  padding: 24px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+}
+
+.avgBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.avgNum {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.totalCount {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.distBlock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+  min-width: 200px;
+}
+
+.distRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.distLabel {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.distBar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.distFill {
+  height: 100%;
+  background: var(--color-star, #fbbf24);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+.distCount {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  width: 20px;
+  text-align: right;
+}
+
+/* 작성 폼 */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(12px);
+}
+
+.formTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.formRating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.formLabel {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.input, .textarea {
+  padding: 10px 14px;
+  background: var(--bg-3);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: var(--transition-normal);
+  resize: vertical;
+  font-family: inherit;
+}
+
+.input:focus, .textarea:focus {
+  border-color: var(--glass-border-accent);
+}
+
+.input::placeholder, .textarea::placeholder {
+  color: var(--text-disabled);
+}
+
+.loginPrompt {
+  padding: 20px;
+  text-align: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
+
+/* 리뷰 목록 */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.noReviews {
+  text-align: center;
+  color: var(--text-tertiary);
+  padding: 40px 0;
+  font-size: 0.9rem;
+}
+
+.card {
+  padding: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(8px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.reviewTitle {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 6px;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.author {
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.date {
+  font-size: 0.75rem;
+  color: var(--text-disabled);
+}
+
+.content {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.helpfulBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  background: none;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: var(--transition-normal);
+}
+
+.helpfulBtn:hover {
+  border-color: var(--glass-border-accent);
+  color: var(--color-accent);
+}

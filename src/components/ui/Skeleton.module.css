@@ -1,0 +1,22 @@
+.skeleton {
+  background: var(--bg-2);
+  background: linear-gradient(to right, var(--bg-2) 8%, var(--bg-4) 18%, var(--bg-2) 33%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s linear infinite;
+  border-radius: var(--radius-md);
+}
+
+.variant-text {
+  height: 1em;
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.variant-circle {
+  border-radius: 50%;
+}
+
+.variant-rect {
+  border-radius: var(--radius-md);
+}

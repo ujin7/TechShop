@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id            String   @id @default(cuid())
+  name          String
+  brand         String
+  category      String
+  subcategory   String
+  price         Int
+  originalPrice Int?
+  images        String   @db.Text
+  thumbnail     String
+  rating        Float
+  reviewCount   Int
+  stock         Int
+  isNew         Boolean
+  isFeatured    Boolean
+  tags          String   @db.Text
+  description   String   @db.Text
+  specs         String   @db.Text
+  createdAt     DateTime
+
+  reviews   Review[]
+  wishlists Wishlist[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  avatar    String?
+  createdAt DateTime
+  address   String?  @db.Text
+
+  reviews   Review[]
+  orders    Order[]
+  wishlists Wishlist[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  userId    String
+  userName  String
+  rating    Int
+  title     String
+  content   String   @db.Text
+  helpful   Int
+  images    String   @db.Text
+  createdAt DateTime
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([productId, createdAt])
+  @@index([userId, createdAt])
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([userId])
+}
+
+model Order {
+  id            String    @id @default(cuid())
+  userId        String
+  status        String
+  items         String    @db.Text
+  shipping      String    @db.Text
+  paymentMethod String
+  subtotal      Int
+  shippingFee   Int
+  total         Int
+  orderedAt     DateTime
+  deliveredAt   DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, orderedAt])
+}

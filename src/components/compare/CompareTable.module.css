@@ -1,0 +1,132 @@
+.wrapper {
+  width: 100%;
+}
+
+.scrollContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.labelCol {
+  width: 160px;
+  min-width: 160px;
+  text-align: left;
+  padding: 16px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  position: sticky;
+  left: 0;
+  background: var(--bg-1);
+  z-index: 1;
+}
+
+.productCol {
+  min-width: 220px;
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.productHeader {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.removeBtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  transition: var(--transition-normal);
+}
+
+.removeBtn:hover {
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.productThumb {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+}
+
+.productBrand {
+  font-size: 0.75rem;
+  color: var(--color-accent);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.productName {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.productPrice {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rowEven {
+  background: var(--bg-2);
+}
+
+.rowOdd {
+  background: var(--bg-3);
+}
+
+.labelCell {
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.rowEven .labelCell {
+  background: var(--bg-2);
+}
+
+.rowOdd .labelCell {
+  background: var(--bg-3);
+}
+
+.valueCell {
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-left: 1px solid var(--glass-border);
+  transition: var(--transition-normal);
+}
+
+.valueCell.best {
+  color: var(--color-accent);
+  font-weight: 700;
+}

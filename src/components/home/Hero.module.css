@@ -1,0 +1,276 @@
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--navbar-height));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: var(--space-20) 0;
+}
+
+/* 배경 Ambient Glow 효과 */
+.bgGlow1 {
+  position: absolute;
+  top: -20%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, var(--color-purple-glow) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  animation: float 8s ease-in-out infinite alternate;
+}
+
+.bgGlow2 {
+  position: absolute;
+  bottom: -20%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, var(--accent-glow-strong) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 0;
+  animation: float 12s ease-in-out infinite alternate-reverse;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-12);
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 600px;
+}
+
+.badge {
+  align-self: flex-start;
+  background: var(--glass-bg);
+  border: var(--border-accent);
+  color: var(--accent-primary);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  letter-spacing: var(--tracking-wide);
+  box-shadow: 0 0 10px var(--accent-glow);
+  backdrop-filter: blur(8px);
+}
+
+.title {
+  font-size: var(--text-hero);
+  line-height: var(--leading-tight);
+}
+
+.description {
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  max-width: 92%;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.secondaryBtn {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  color: var(--text-secondary) !important;
+}
+
+.secondaryBtn:hover {
+  border-color: var(--text-primary) !important;
+  color: var(--text-primary) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.trustBadges {
+  display: flex;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  align-items: center;
+}
+
+.badgeItem {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  font-weight: var(--font-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.mainImageWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 1;
+  border-radius: var(--radius-2xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border-hover);
+  box-shadow: var(--shadow-xl), 0 0 40px var(--accent-glow-subtle);
+  backdrop-filter: var(--glass-blur-heavy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: fadeInRight 1s var(--transition-smooth) forwards;
+  transform: rotateY(-10deg) rotateX(5deg);
+  transition: transform var(--transition-spring);
+}
+
+.mainImageWrapper:hover {
+  transform: rotateY(0deg) rotateX(0deg) scale(1.02);
+  box-shadow: var(--shadow-xl), 0 0 60px var(--accent-glow);
+}
+
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(50px) rotateY(-20deg); }
+  to { opacity: 1; transform: translateX(0) rotateY(-10deg) rotateX(5deg); }
+}
+
+.placeholderImg {
+  width: 80%;
+  height: 80%;
+  background: linear-gradient(135deg, #1f2833, #0b0c10);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-dim);
+  font-weight: var(--font-bold);
+  font-size: var(--text-xl);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 반사광 이펙트 */
+.placeholderImg::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to bottom right, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 100%);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+/* ──────────────────────────────
+   FEATURED PRODUCTS (Parallax & Float) 
+   ────────────────────────────── */
+.featuredGrid {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainProduct {
+  position: relative;
+  width: 380px; /* 더 크고 시원한 메인 카드 사이즈 */
+  height: 480px;
+  border-radius: var(--radius-2xl);
+  background: var(--bg-1); /* 블러 대신 솔리드 다크 백그라운드로 명확성 추가 */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.62), 0 0 40px var(--accent-glow-subtle);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  transition: transform var(--transition-smooth);
+}
+
+.mainProduct:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 36px 70px rgba(0,0,0,0.56), 0 0 60px var(--accent-glow);
+}
+
+.mainProductImageWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+}
+
+.mainProductImage {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+  transition: transform var(--transition-smooth);
+}
+
+.mainProduct:hover .mainProductImage {
+  transform: scale(1.08); /* 호버 시 미세한 제품 줌업 */
+}
+
+.productInfoFloating {
+  padding: var(--space-4) var(--space-5);
+  background: rgba(11, 12, 16, 0.85); /* 매우 짙게 투명한 배경 */
+  border-top: 1px solid var(--glass-border);
+}
+
+.brandName {
+  font-size: var(--text-xs);
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  font-weight: var(--font-bold);
+  margin-bottom: var(--space-1);
+}
+
+.productName {
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-tight);
+}
+
+.buyNowBtnWrapper {
+  margin-top: var(--space-4);
+}
+
+.buyNowBtn {
+  width: 100%;
+  padding: var(--space-3) 0;
+  background: var(--accent-primary);
+  color: var(--bg-1);
+  font-weight: var(--font-bold);
+  font-size: var(--text-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.buyNowBtn:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--accent-glow-strong);
+}
