@@ -6,7 +6,7 @@
     "dev": "next dev",
     "dev:clean": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true});console.log('.next cleared')}catch(e){}\" && next dev",
     "reset:next": "node -e \"try{require('fs').rmSync('.next',{recursive:true,force:true});console.log('.next cleared')}catch(e){}\"",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
