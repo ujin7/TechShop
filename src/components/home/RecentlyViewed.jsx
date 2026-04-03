@@ -9,7 +9,7 @@ import styles from './RecentlyViewed.module.css';
 
 export default function RecentlyViewed({ products: propProducts }) {
   const [products, setProducts] = useState(propProducts || []);
-  const fallbackImage = '/placeholder-product.svg';
+  const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
 
   useEffect(() => {
     if (propProducts) return;
@@ -37,7 +37,7 @@ export default function RecentlyViewed({ products: propProducts }) {
             <Link key={p.id} href={`/products/${p.id}`} className={styles.item}>
               <div className={styles.imgWrap}>
                 <Image
-                  src={p.thumbnail || p.images?.[0] || '/placeholder.png'}
+                  src={p.thumbnail || p.images?.[0] || EMPTY_IMAGE}
                   alt={p.name}
                   fill
                   sizes="80px"
@@ -45,7 +45,7 @@ export default function RecentlyViewed({ products: propProducts }) {
                   unoptimized
                   onError={(e) => {
                     e.currentTarget.onerror = null;
-                    e.currentTarget.src = fallbackImage;
+                    e.currentTarget.src = EMPTY_IMAGE;
                   }}
                 />
               </div>

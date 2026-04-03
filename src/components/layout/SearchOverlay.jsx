@@ -31,7 +31,7 @@ export default function SearchOverlay({ onClose }) {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const debouncedQuery = useDebounce(query, 300);
-  const fallbackImage = '/placeholder-product.svg';
+  const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
   const abortRef = useRef(null);
 
   /* 오버레이 열리면 입력창 포커스 */
@@ -153,7 +153,7 @@ export default function SearchOverlay({ onClose }) {
                     >
                       <div className={styles.thumb}>
                         <Image
-                          src={p.thumbnail || p.images?.[0] || '/placeholder.png'}
+                          src={p.thumbnail || p.images?.[0] || EMPTY_IMAGE}
                           alt={p.name}
                           fill
                           sizes="56px"
@@ -161,7 +161,7 @@ export default function SearchOverlay({ onClose }) {
                           unoptimized
                           onError={(e) => {
                             e.currentTarget.onerror = null;
-                            e.currentTarget.src = fallbackImage;
+                            e.currentTarget.src = EMPTY_IMAGE;
                           }}
                         />
                       </div>

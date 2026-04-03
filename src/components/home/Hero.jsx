@@ -9,7 +9,6 @@ import styles from './Hero.module.css';
 
 export default function Hero({ featuredProducts = [] }) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const fallbackImage = '/placeholder-product.svg';
   const mainProduct = featuredProducts[0];
 
   useEffect(() => {
