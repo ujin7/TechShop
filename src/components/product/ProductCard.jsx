@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Activity, Heart, ShoppingCart, Star } from 'lucide-react';
+import { Activity, Heart, ShoppingCart } from 'lucide-react';
 import Badge from '../ui/Badge';
 import ProductImageFallback from './ProductImageFallback';
 import { formatPrice } from '@/utils/formatPrice';
@@ -116,18 +116,16 @@ export default function ProductCard({
       <Link href={`/products/${product.id}`} className={styles.info}>
         <div className={styles.metaRow}>
           <p className={styles.brand}>{product.brand}</p>
-          <span className={styles.rating}>
-            <Star size={12} fill="currentColor" />
-            {product.rating ?? '-'}
+          <span className={styles.stockPill}>
+            {product.stock ? `재고 ${product.stock}개` : '재고 확인 필요'}
           </span>
         </div>
 
         <h3 className={styles.name}>{product.name}</h3>
 
-        <p className={styles.subInfo}>
-          리뷰 {product.reviewCount?.toLocaleString?.() ?? 0}개
-          {product.stock ? ` · 재고 ${product.stock}개` : ''}
-        </p>
+        {product.subcategory && (
+          <p className={styles.subInfo}>{product.subcategory}</p>
+        )}
 
         <div className={styles.priceRow}>
           <div className={styles.priceGroup}>

@@ -171,13 +171,16 @@
   letter-spacing: 0.1em;
 }
 
-.rating {
+.stockPill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: #ffd76a;
-  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.74rem;
   font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .name {

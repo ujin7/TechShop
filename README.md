@@ -1,80 +1,120 @@
-﻿# TechShop
+# TechShop
 
-Next.js 14(App Router) + Prisma + PostgreSQL 기반 전자상거래 데모 프로젝트입니다.
+Next.js 14 App Router 기반의 프리미엄 IT 디바이스 쇼핑몰 프로젝트입니다.  
+스마트폰, 노트북, 태블릿, 모니터, 오디오, 액세서리를 탐색하고 비교하고 장바구니에 담을 수 있도록 구성되어 있습니다.
 
-## 주요 기능
-- 상품 목록/상세 조회
-- 카테고리/서브카테고리 탐색
-- 검색, 정렬, 필터
-- 장바구니, 주문 생성/조회/취소
-- 리뷰 작성/수정/삭제
-- 위시리스트
-- 회원가입/로그인(JWT 쿠키 세션)
-- 마이페이지(주문/리뷰/프로필)
+## Stack
 
-## 기술 스택
 - Next.js 14
 - React 18
 - Prisma ORM
-- PostgreSQL
-- lucide-react
+- PostgreSQL / Supabase
+- Supabase Auth
 - CSS Modules
+- Lucide React
 
-## 프로젝트 구조
+## Features
+
+- 홈 화면 큐레이션 섹션과 마이크로 인터랙션
+- 카테고리 / 서브카테고리 탐색
+- 상품 카드, 상품 상세, 비교 기능
+- 장바구니 / 체크아웃 흐름
+- 리뷰 섹션 및 마이페이지 구조
+- 이메일 로그인 / 회원가입
+- Google OAuth 로그인
+- `/cart`, `/orders` 보호 라우트
+
+## Project Structure
+
 ```text
 src/
-  app/                # App Router 페이지 + API Route Handlers
-  components/         # UI/도메인 컴포넌트
-  context/            # 전역 상태(Context)
-  hooks/              # 커스텀 훅
-  data/               # 시드용 데이터
-  lib/                # prisma, auth, serializer
-  utils/              # 유틸 함수
+  app/
+    api/
+    auth/
+    categories/
+    compare/
+    products/
+    checkout/
+    mypage/
+  components/
+    auth/
+    cart/
+    checkout/
+    compare/
+    home/
+    layout/
+    product/
+    ui/
+  context/
+  hooks/
+  lib/
+    supabase/
+  utils/
 prisma/
-  schema.prisma
-  seed.js
+public/
 ```
 
-## 환경 변수
-`.env`에 아래 값을 설정하세요.
+## Local Development
 
-```env
-DATABASE_URL="postgresql://..."
-DIRECT_URL="postgresql://..."
-JWT_SECRET="your-strong-random-secret"
-```
+### 1. Install
 
-- `DATABASE_URL`: PostgreSQL Pooler 연결 문자열(런타임용)
-- `DIRECT_URL`: PostgreSQL Direct 연결 문자열(마이그레이션/관리용)
-- `JWT_SECRET`: 세션 토큰 서명 키(충분히 길고 랜덤한 값 권장)
-
-## 로컬 실행
 ```bash
 npm install
+```
+
+### 2. Environment Variables
+
+`.env` 또는 `.env.local`에 아래 값을 설정합니다.
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+DATABASE_URL=postgresql://...
+DIRECT_URL=postgresql://...
+JWT_SECRET=your-random-secret
+```
+
+### 3. Prisma
+
+```bash
 npm run db:generate
 npm run db:push
 npm run db:seed
+```
+
+### 4. Run
+
+```bash
 npm run dev
 ```
 
-## 스크립트
-- `npm run dev`: 개발 서버 실행
-- `npm run build`: `prisma generate && next build`
-- `npm run start`: 프로덕션 서버 실행
-- `npm run lint`: ESLint 실행
-- `npm run db:generate`: Prisma Client 생성
-- `npm run db:push`: 스키마 반영
-- `npm run db:seed`: 시드 데이터 입력
-- `npm run db:studio`: Prisma Studio 실행
+## Scripts
 
-## 배포(Vercel)
-Vercel 환경 변수에 아래 키를 등록하세요.
-- `DATABASE_URL`
-- `DIRECT_URL`
-- `JWT_SECRET`
+- `npm run dev` : 개발 서버 실행
+- `npm run build` : `prisma generate` 후 프로덕션 빌드
+- `npm run start` : 프로덕션 서버 실행
+- `npm run lint` : ESLint 실행
+- `npm run db:generate` : Prisma Client 생성
+- `npm run db:push` : 스키마를 데이터베이스에 반영
+- `npm run db:seed` : 샘플 데이터 입력
+- `npm run db:studio` : Prisma Studio 실행
 
-배포 시 `build` 스크립트에서 Prisma Client를 자동 생성합니다.
+## Deployment
 
-## 참고
-- 주문/리뷰/위시리스트/회원가입 API는 DB 기본 `cuid()` ID를 사용해 동시 요청 시 ID 충돌을 피하도록 구성되어 있습니다.
-- `/`와 `/api/products`는 DB 오류 시 로컬 데이터로 fallback 하도록 처리되어, 일시적인 DB 장애에서 전체 화면이 바로 죽지 않게 했습니다.
+Vercel 배포 시 아래 환경변수가 필요합니다.
+
+```env
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+DATABASE_URL
+DIRECT_URL
+JWT_SECRET
+```
+
+프로젝트의 `build` 스크립트에는 이미 `prisma generate && next build`가 포함되어 있습니다.
+
+## Notes
+
+- 현재 UI는 CSS Modules 기반으로 구성되어 있습니다.
+- 일부 상품 메타데이터는 시드 데이터 기반이므로, 운영 환경에서는 실제 DB 데이터 기준으로 연결하는 것이 좋습니다.
+- Supabase Auth를 사용하며, 브라우저와 서버 양쪽에서 세션을 처리하도록 구성되어 있습니다.

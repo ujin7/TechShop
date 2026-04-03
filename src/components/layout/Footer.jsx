@@ -14,7 +14,7 @@ export default function Footer() {
               </span>
             </div>
             <p className={styles.desc}>
-              프리미엄 IT 디바이스를 더 쉽고 감각적으로 탐색하는
+              프리미엄 IT 디바이스를 쉽고 감각적으로 탐색하는
               <br />
               TechShop의 쇼핑 경험을 만나보세요.
             </p>
