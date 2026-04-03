@@ -2,52 +2,64 @@
 
 /**
  * ClientLayout
- * hooks(useCart, useAuth)瑜??ъ슜?섏뿬 Navbar??props瑜?二쇱엯?섍퀬,
- * ?꾩뿭 ?ㅻ쾭?덉씠 而댄룷?뚰듃(CartDrawer, CompareBar, Toast, AuthModal)瑜??뚮뜑留곹븳??
- * layout.js(Server Component)??<body> ?덉뿉???몄텧?쒕떎.
+ * hooks(useCart, useAuth)를 사용하여 Navbar에 props를 주입하고,
+ * 전역 오버레이 컴포넌트(CartDrawer, CompareBar, Toast, AuthModal)를 렌더링한다.
+ * layout.js(Server Component)의 <body> 안에서 호출된다.
  */
 import { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import PresenceTracker from '@/components/analytics/PresenceTracker';
 import { useCart } from '@/hooks/useCart';
 import { useAuth } from '@/hooks/useAuth';
 
-// 珥덇린 ?뚮뜑??遺덊븘?뷀븳 臾닿굅??而댄룷?뚰듃??dynamic import濡?遺꾨━
-const CartDrawer  = dynamic(() => import('@/components/cart/CartDrawer'),   { ssr: false });
-const CompareBar  = dynamic(() => import('@/components/compare/CompareBar'), { ssr: false });
-const ToastList   = dynamic(() => import('@/components/ui/Toast'),           { ssr: false });
-const AuthModal   = dynamic(() => import('@/components/auth/AuthModal'),     { ssr: false });
+const CartDrawer = dynamic(() => import('@/components/cart/CartDrawer'), { ssr: false });
+const CompareBar = dynamic(() => import('@/components/compare/CompareBar'), { ssr: false });
+const ToastList = dynamic(() => import('@/components/ui/Toast'), { ssr: false });
+const AuthModal = dynamic(() => import('@/components/auth/AuthModal'), { ssr: false });
 
 export default function ClientLayout({ children, categories }) {
   const router = useRouter();
-  const { items, totalItems, isDrawerOpen, openDrawer, closeDrawer, removeFromCart, updateQuantity } = useCart();
+  const {
+    items,
+    totalItems,
+    isDrawerOpen,
+    openDrawer,
+    closeDrawer,
+    removeFromCart,
+    updateQuantity,
+  } = useCart();
   const { user, login, signup, loginWithGoogle, logout, isLoading: authLoading, authError } = useAuth();
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
-  // CartDrawer calls onUpdateQty(id, delta) with +1/-1 delta,
-  // but useCart.updateQuantity expects absolute quantity.
   const handleUpdateQty = useCallback((productId, delta) => {
-    const item = items.find((i) => i.productId === productId);
-    if (item) updateQuantity(productId, item.quantity + delta);
+    const item = items.find((entry) => entry.productId === productId);
+    if (item) {
+      updateQuantity(productId, item.quantity + delta);
+    }
   }, [items, updateQuantity]);
 
-  // CartDrawer uses item.id but CartContext stores item.productId ??normalize here.
-  const cartItems = items.map((i) => ({ ...i, id: i.productId }));
+  const cartItems = items.map((item) => ({ ...item, id: item.productId }));
 
   const handleLogin = useCallback(async ({ email, password }) => {
     const result = await login(email, password);
-    if (result.success) setIsAuthOpen(false);
+    if (result.success) {
+      setIsAuthOpen(false);
+    }
   }, [login]);
 
   const handleSignup = useCallback(async ({ name, email, password }) => {
     const result = await signup({ name, email, password });
-    if (result.success) setIsAuthOpen(false);
+    if (result.success) {
+      setIsAuthOpen(false);
+    }
   }, [signup]);
 
   return (
     <>
+      <PresenceTracker />
       <Navbar
         categories={categories}
         cartItemCount={totalItems}
@@ -85,4 +97,3 @@ export default function ClientLayout({ children, categories }) {
     </>
   );
 }
-

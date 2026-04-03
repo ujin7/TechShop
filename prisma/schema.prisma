@@ -95,3 +95,13 @@ model Order {
 
   @@index([userId, orderedAt])
 }
+
+model PresenceSession {
+  id         String   @id
+  path       String
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+
+  @@index([lastSeenAt])
+  @@index([path, lastSeenAt])
+}

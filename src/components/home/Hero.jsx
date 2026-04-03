@@ -1,8 +1,16 @@
-'use client';
+﻿'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Zap, Shield, Star, ChevronRight, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  ChevronRight,
+  Shield,
+  Sparkles,
+  Star,
+  Users,
+  Zap,
+} from 'lucide-react';
 import Button from '../ui/Button';
 import styles from './Hero.module.css';
 
@@ -13,26 +21,16 @@ const SHOWCASE_PRODUCTS = [
     badge: 'BEST SELLER',
     name: 'Galaxy S25 Ultra',
     brand: 'Samsung',
-    price: '1,799,000',
-    originalPrice: '1,999,000',
-    discount: 10,
-    rating: 4.9,
-    reviews: 2847,
-    spec: 'Snapdragon 8 Elite · 200MP',
+    spec: 'Snapdragon 8 Elite · 200MP 카메라',
     accent: '#3b82f6',
     gradient: 'linear-gradient(145deg, #0a1428 0%, #0f1e3d 60%, #0a1530 100%)',
   },
   {
     id: 2,
     category: 'laptops',
-    badge: 'NEW ARRIVAL',
+    badge: 'EDITOR PICK',
     name: 'MacBook Pro 16"',
     brand: 'Apple',
-    price: '3,490,000',
-    originalPrice: null,
-    discount: 0,
-    rating: 4.8,
-    reviews: 1923,
     spec: 'M4 Pro · 48GB RAM',
     accent: '#a855f7',
     gradient: 'linear-gradient(145deg, #120a22 0%, #1e0f38 60%, #130a2a 100%)',
@@ -43,11 +41,6 @@ const SHOWCASE_PRODUCTS = [
     badge: 'TOP RATED',
     name: 'WH-1000XM6',
     brand: 'Sony',
-    price: '449,000',
-    originalPrice: '549,000',
-    discount: 18,
-    rating: 4.9,
-    reviews: 3541,
     spec: '30dB ANC · LDAC Hi-Res',
     accent: '#22c55e',
     gradient: 'linear-gradient(145deg, #071a0e 0%, #0d2b17 60%, #071a0e 100%)',
@@ -68,60 +61,103 @@ export default function Hero() {
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const [inView, setInView] = useState(false);
   const [activeProduct, setActiveProduct] = useState(0);
-  const [visitorCount, setVisitorCount] = useState(347);
+  const [activeVisitors, setActiveVisitors] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const sectionRef = useRef(null);
   const intervalRef = useRef(null);
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
+    const handleMouseMove = (event) => {
+      setMousePos({
+        x: event.clientX / window.innerWidth,
+        y: event.clientY / window.innerHeight,
+      });
     };
+
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setInView(true); },
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+        }
+      },
       { threshold: 0.1 }
     );
+
     const section = sectionRef.current;
-    if (section) observer.observe(section);
+    if (section) {
+      observer.observe(section);
+    }
+
     return () => observer.disconnect();
   }, []);
 
   const goToNext = useCallback(() => {
     setIsTransitioning(true);
-    setTimeout(() => {
-      setActiveProduct(prev => (prev + 1) % SHOWCASE_PRODUCTS.length);
+
+    window.setTimeout(() => {
+      setActiveProduct((prev) => (prev + 1) % SHOWCASE_PRODUCTS.length);
       setIsTransitioning(false);
     }, 300);
   }, []);
 
   useEffect(() => {
-    intervalRef.current = setInterval(goToNext, 4500);
-    return () => clearInterval(intervalRef.current);
+    intervalRef.current = window.setInterval(goToNext, 4500);
+    return () => window.clearInterval(intervalRef.current);
   }, [goToNext]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setVisitorCount(prev => Math.max(300, prev + Math.floor(Math.random() * 5) - 2));
-    }, 3200);
-    return () => clearInterval(timer);
+    let cancelled = false;
+
+    const fetchPresence = async () => {
+      try {
+        const response = await fetch('/api/presence', { cache: 'no-store' });
+        if (!response.ok || cancelled) return;
+
+        const data = await response.json();
+        if (typeof data?.count === 'number') {
+          setActiveVisitors(data.count);
+        }
+      } catch (error) {
+        console.error('Failed to fetch active visitors:', error);
+      }
+    };
+
+    const handlePresenceUpdate = (event) => {
+      const nextCount = event?.detail?.count;
+      if (typeof nextCount === 'number') {
+        setActiveVisitors(nextCount);
+      }
+    };
+
+    void fetchPresence();
+    window.addEventListener('techshop:presence-update', handlePresenceUpdate);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener('techshop:presence-update', handlePresenceUpdate);
+    };
   }, []);
 
   const handleDotClick = (index) => {
-    clearInterval(intervalRef.current);
+    window.clearInterval(intervalRef.current);
     setIsTransitioning(true);
-    setTimeout(() => {
+
+    window.setTimeout(() => {
       setActiveProduct(index);
       setIsTransitioning(false);
     }, 300);
-    intervalRef.current = setInterval(goToNext, 4500);
+
+    intervalRef.current = window.setInterval(goToNext, 4500);
   };
 
   const product = SHOWCASE_PRODUCTS[activeProduct];
+  const visitorLabel =
+    typeof activeVisitors === 'number' ? activeVisitors.toLocaleString() : '...';
 
   return (
     <section
@@ -141,12 +177,13 @@ export default function Hero() {
       <div className={styles.bgGlow3} />
 
       <div className={`app-container ${styles.container}`}>
-        {/* ── Left: Copy ── */}
         <div className={styles.left}>
           <div className={`${styles.liveBadge} ${styles.entry}`} style={{ '--d': '0ms' }}>
             <span className={styles.liveDot} />
             <Users size={12} />
-            <span>지금 <strong>{visitorCount.toLocaleString()}</strong>명이 쇼핑 중</span>
+            <span>
+              지금 <strong>{visitorLabel}</strong>명이 쇼핑 중
+            </span>
           </div>
 
           <div className={`${styles.copyBlock} ${styles.entry}`} style={{ '--d': '60ms' }}>
@@ -155,14 +192,14 @@ export default function Hero() {
               2026 Premium Tech Curation
             </p>
             <h1 className={styles.title}>
-              최고의 기술,
+              최고급 기술,
               <br />
-              <span className={styles.titleGradient}>당신의 선택</span>
+              <span className={styles.titleGradient}>감각적인 선택</span>
             </h1>
             <p className={styles.description}>
-              국내 최대 프리미엄 IT 기기 큐레이션.
+              국내외 프리미엄 IT 기기를 한곳에 모았습니다.
               <br />
-              전문가가 엄선한 제품을 명확한 스펙 비교와 함께 만나보세요.
+              복잡한 비교보다 빠른 발견과 자연스러운 구매 흐름에 집중했습니다.
             </p>
           </div>
 
@@ -174,7 +211,7 @@ export default function Hero() {
             </Link>
             <Link href="/compare">
               <Button size="lg" variant="ghost" className={styles.ctaSecondary}>
-                제품 비교하기
+                비교 바로 시작하기
               </Button>
             </Link>
           </div>
@@ -189,16 +226,17 @@ export default function Hero() {
           </div>
 
           <div className={`${styles.brandStrip} ${styles.entry}`} style={{ '--d': '270ms' }}>
-            <span className={styles.brandLabel}>공식 파트너</span>
+            <span className={styles.brandLabel}>공식 파트너 브랜드</span>
             <div className={styles.brands}>
-              {BRANDS.map(b => (
-                <span key={b} className={styles.brand}>{b}</span>
+              {BRANDS.map((brand) => (
+                <span key={brand} className={styles.brand}>
+                  {brand}
+                </span>
               ))}
             </div>
           </div>
         </div>
 
-        {/* ── Right: Showcase ── */}
         <div className={`${styles.right} ${styles.entry}`} style={{ '--d': '80ms' }}>
           <div
             className={styles.showcaseCard}
@@ -223,10 +261,16 @@ export default function Hero() {
               {product.badge}
             </div>
 
-            <div className={`${styles.productVisual} ${isTransitioning ? styles.visualOut : styles.visualIn}`}>
+            <div
+              className={`${styles.productVisual} ${
+                isTransitioning ? styles.visualOut : styles.visualIn
+              }`}
+            >
               <div
                 className={styles.productIconBg}
-                style={{ background: `radial-gradient(circle, ${product.accent}28 0%, transparent 72%)` }}
+                style={{
+                  background: `radial-gradient(circle, ${product.accent}28 0%, transparent 72%)`,
+                }}
               >
                 <div
                   className={styles.productGlowRing}
@@ -243,12 +287,12 @@ export default function Hero() {
             </div>
 
             <div className={styles.dotIndicators}>
-              {SHOWCASE_PRODUCTS.map((_, i) => (
+              {SHOWCASE_PRODUCTS.map((item, index) => (
                 <button
-                  key={i}
-                  className={`${styles.dot} ${i === activeProduct ? styles.dotActive : ''}`}
-                  onClick={() => handleDotClick(i)}
-                  aria-label={`제품 ${i + 1}`}
+                  key={item.id}
+                  className={`${styles.dot} ${index === activeProduct ? styles.dotActive : ''}`}
+                  onClick={() => handleDotClick(index)}
+                  aria-label={`${item.name} 보기`}
                 />
               ))}
             </div>
@@ -267,15 +311,15 @@ export default function Hero() {
               <Zap size={15} className={styles.sideMetricIcon} />
               <div>
                 <span className={styles.sideMetricValue}>당일</span>
-                <span className={styles.sideMetricLabel}>출고 가능</span>
+                <span className={styles.sideMetricLabel}>출고 대응</span>
               </div>
             </div>
             <div className={styles.sideMetricDivider} />
             <div className={styles.sideMetric}>
               <Star size={15} className={styles.sideMetricIcon} />
               <div>
-                <span className={styles.sideMetricValue}>4.9</span>
-                <span className={styles.sideMetricLabel}>평균 만족도</span>
+                <span className={styles.sideMetricValue}>엄선</span>
+                <span className={styles.sideMetricLabel}>인기 제품 큐레이션</span>
               </div>
             </div>
           </div>
