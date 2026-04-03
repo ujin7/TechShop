@@ -1,19 +1,38 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import {
-  Search, ShoppingCart, User, Cpu, Menu, X,
-  ChevronDown, ChevronRight, LayoutDashboard, Package, LogOut,
-  Smartphone, Laptop, Tablet, Monitor, Headphones, Package as PackageIcon,
+  Search,
+  ShoppingCart,
+  User,
+  Cpu,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+  LayoutDashboard,
+  Package,
+  LogOut,
+  Smartphone,
+  Laptop,
+  Tablet,
+  Monitor,
+  Headphones,
+  Package as PackageIcon,
 } from 'lucide-react';
 import styles from './Navbar.module.css';
 
 const SearchOverlay = dynamic(() => import('./SearchOverlay'), { ssr: false });
 
 const ICON_MAP = {
-  Smartphone, Laptop, Tablet, Monitor, Headphones, Package: PackageIcon,
+  Smartphone,
+  Laptop,
+  Tablet,
+  Monitor,
+  Headphones,
+  Package: PackageIcon,
 };
 
 export default function Navbar({
@@ -29,33 +48,33 @@ export default function Navbar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpandedCat, setMobileExpandedCat] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
-  const closeSearch = useCallback(() => setSearchOpen(false), []);
   const userMenuRef = useRef(null);
-  const navRef = useRef(null);
   const closeTimer = useRef(null);
 
-  /* 모바일 메뉴 열릴 때 스크롤 잠금 */
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [mobileMenuOpen]);
 
-  const closeMobileMenu = useCallback(() => {
-    setMobileMenuOpen(false);
-    setMobileExpandedCat(null);
-  }, []);
-
-  /* 유저 메뉴 바깥 클릭 시 닫기 */
   useEffect(() => {
-    if (!userMenuOpen) return;
-    const handler = (e) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+    if (!userMenuOpen) return undefined;
+
+    const handleOutsideClick = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setUserMenuOpen(false);
       }
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, [userMenuOpen]);
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+    setMobileExpandedCat(null);
+  };
 
   const handleCategoryEnter = (slug) => {
     clearTimeout(closeTimer.current);
@@ -71,27 +90,27 @@ export default function Navbar({
     onLogout();
   };
 
-  const forceGoHome = useCallback((e) => {
-    e.preventDefault();
+  const forceGoHome = (event) => {
+    event.preventDefault();
     window.location.assign('/');
-  }, []);
+  };
 
   return (
     <>
       <header className={styles.navbar}>
         <div className={`app-container ${styles.navContainer}`}>
-
-          {/* Logo */}
-          <Link href="/" className={styles.logo} onClick={forceGoHome}>
+          <Link href="/" className={styles.logo} onClick={forceGoHome} aria-label="TechShop 홈으로 이동">
             <Cpu className={styles.logoIcon} size={28} />
-            <span>TECH<span className="text-gradient-cyan">SHOP</span></span>
+            <span>
+              TECH<span className="text-gradient-cyan">SHOP</span>
+            </span>
           </Link>
 
-          {/* Category Nav */}
-          <nav className={styles.navLinks} ref={navRef}>
+          <nav className={styles.navLinks}>
             {categories.map((cat) => {
               const Icon = ICON_MAP[cat.icon] || PackageIcon;
               const isOpen = activeCategory === cat.slug;
+
               return (
                 <div
                   key={cat.slug}
@@ -106,12 +125,16 @@ export default function Navbar({
                   >
                     {cat.name}
                     {cat.subcategories?.length > 0 && (
-                      <ChevronDown size={12} className={`${styles.catChevron} ${isOpen ? styles.catChevronOpen : ''}`} />
+                      <ChevronDown
+                        size={12}
+                        className={`${styles.catChevron} ${isOpen ? styles.catChevronOpen : ''}`}
+                      />
                     )}
                   </Link>
 
                   {isOpen && cat.subcategories?.length > 0 && (
-                    <div className={styles.dropdown}
+                    <div
+                      className={styles.dropdown}
                       onMouseEnter={() => handleCategoryEnter(cat.slug)}
                       onMouseLeave={handleCategoryLeave}
                     >
@@ -120,6 +143,7 @@ export default function Navbar({
                           <Icon size={18} />
                           <span>{cat.name}</span>
                         </div>
+
                         {cat.subcategories.map((sub) => (
                           <Link
                             key={sub.slug}
@@ -131,12 +155,13 @@ export default function Navbar({
                             <span className={styles.subDesc}>{sub.description}</span>
                           </Link>
                         ))}
+
                         <Link
                           href={`/categories/${cat.slug}`}
                           className={styles.viewAllSub}
                           onClick={() => setActiveCategory(null)}
                         >
-                          전체 보기 →
+                          전체 보기
                         </Link>
                       </div>
                     </div>
@@ -145,12 +170,13 @@ export default function Navbar({
               );
             })}
 
-            <Link href="/compare" className={styles.navLink}>비교</Link>
+            <Link href="/compare" className={styles.navLink}>
+              비교
+            </Link>
           </nav>
 
-          {/* Right Actions */}
           <div className={styles.actions}>
-            <button className={styles.iconBtn} aria-label="Search" onClick={() => setSearchOpen(true)}>
+            <button className={styles.iconBtn} aria-label="검색 열기" onClick={() => setSearchOpen(true)}>
               <Search size={22} />
             </button>
 
@@ -158,7 +184,8 @@ export default function Navbar({
               <div className={styles.userMenu} ref={userMenuRef}>
                 <button
                   className={`${styles.userBtn} ${userMenuOpen ? styles.userBtnOpen : ''}`}
-                  onClick={() => setUserMenuOpen((v) => !v)}
+                  onClick={() => setUserMenuOpen((value) => !value)}
+                  aria-label="사용자 메뉴 열기"
                 >
                   <div className={styles.avatar}>{user.name?.charAt(0).toUpperCase()}</div>
                   <span className={styles.userName}>{user.name}</span>
@@ -174,61 +201,67 @@ export default function Navbar({
                         <p className={styles.dropdownEmail}>{user.email}</p>
                       </div>
                     </div>
+
                     <div className={styles.dropdownDivider} />
+
                     <Link href="/mypage" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
-                      <LayoutDashboard size={15} /> 마이페이지
+                      <LayoutDashboard size={15} />
+                      마이페이지
                     </Link>
                     <Link href="/mypage/orders" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
-                      <Package size={15} /> 주문 내역
+                      <Package size={15} />
+                      주문 내역
                     </Link>
+
                     <div className={styles.dropdownDivider} />
+
                     <button className={`${styles.dropdownItem} ${styles.dropdownLogout}`} onClick={handleLogout}>
-                      <LogOut size={15} /> 로그아웃
+                      <LogOut size={15} />
+                      로그아웃
                     </button>
                   </div>
                 )}
               </div>
             ) : (
-              <button className={styles.iconBtn} aria-label="로그인" onClick={onOpenAuth}>
+              <button className={styles.iconBtn} aria-label="로그인 열기" onClick={onOpenAuth}>
                 <User size={22} />
               </button>
             )}
 
-            <button className={styles.iconBtn} aria-label="Cart" onClick={onOpenCart}>
+            <button className={styles.iconBtn} aria-label="장바구니 열기" onClick={onOpenCart}>
               <ShoppingCart size={22} />
               {cartItemCount > 0 && <span className={styles.cartBadge}>{cartItemCount}</span>}
             </button>
 
-            {/* 햄버거 버튼 — 모바일만 표시 */}
             <button
               className={`${styles.iconBtn} ${styles.hamburger}`}
-              aria-label="메뉴"
-              onClick={() => setMobileMenuOpen((v) => !v)}
+              aria-label="모바일 메뉴 열기"
+              onClick={() => setMobileMenuOpen((value) => !value)}
             >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
-
         </div>
       </header>
 
-      {/* 모바일 드로어 */}
       {mobileMenuOpen && (
         <div className={styles.mobileOverlay} onClick={closeMobileMenu}>
-          <nav className={styles.mobileDrawer} onClick={(e) => e.stopPropagation()}>
+          <nav className={styles.mobileDrawer} onClick={(event) => event.stopPropagation()}>
             <div className={styles.mobileHeader}>
               <Link
                 href="/"
                 className={styles.logo}
-                onClick={(e) => {
+                onClick={(event) => {
                   closeMobileMenu();
-                  forceGoHome(e);
+                  forceGoHome(event);
                 }}
               >
                 <Cpu size={22} />
-                <span>TECH<span className="text-gradient-cyan">SHOP</span></span>
+                <span>
+                  TECH<span className="text-gradient-cyan">SHOP</span>
+                </span>
               </Link>
-              <button className={styles.iconBtn} onClick={closeMobileMenu} aria-label="닫기">
+              <button className={styles.iconBtn} onClick={closeMobileMenu} aria-label="메뉴 닫기">
                 <X size={22} />
               </button>
             </div>
@@ -237,6 +270,7 @@ export default function Navbar({
               {categories.map((cat) => {
                 const Icon = ICON_MAP[cat.icon] || PackageIcon;
                 const expanded = mobileExpandedCat === cat.slug;
+
                 return (
                   <div key={cat.slug} className={styles.mobileCatGroup}>
                     <div className={styles.mobileCatRow}>
@@ -248,16 +282,21 @@ export default function Navbar({
                         <Icon size={16} />
                         {cat.name}
                       </Link>
+
                       {cat.subcategories?.length > 0 && (
                         <button
                           className={styles.mobileExpandBtn}
                           onClick={() => setMobileExpandedCat(expanded ? null : cat.slug)}
-                          aria-label="펼치기"
+                          aria-label={`${cat.name} 하위 카테고리 열기`}
                         >
-                          <ChevronRight size={16} className={`${styles.mobileChevron} ${expanded ? styles.mobileChevronOpen : ''}`} />
+                          <ChevronRight
+                            size={16}
+                            className={`${styles.mobileChevron} ${expanded ? styles.mobileChevronOpen : ''}`}
+                          />
                         </button>
                       )}
                     </div>
+
                     {expanded && cat.subcategories?.length > 0 && (
                       <div className={styles.mobileSubList}>
                         {cat.subcategories.map((sub) => (
@@ -275,6 +314,7 @@ export default function Navbar({
                   </div>
                 );
               })}
+
               <Link href="/compare" className={styles.mobileCatLink} onClick={closeMobileMenu}>
                 비교
               </Link>
@@ -291,26 +331,37 @@ export default function Navbar({
                     <p className={styles.dropdownEmail}>{user.email}</p>
                   </div>
                 </div>
+
                 <Link href="/mypage" className={styles.mobileUserLink} onClick={closeMobileMenu}>
-                  <LayoutDashboard size={15} /> 마이페이지
+                  <LayoutDashboard size={15} />
+                  마이페이지
                 </Link>
                 <Link href="/mypage/orders" className={styles.mobileUserLink} onClick={closeMobileMenu}>
-                  <Package size={15} /> 주문 내역
+                  <Package size={15} />
+                  주문 내역
                 </Link>
-                <button className={`${styles.mobileUserLink} ${styles.mobileLogout}`} onClick={() => { handleLogout(); closeMobileMenu(); }}>
-                  <LogOut size={15} /> 로그아웃
+                <button
+                  className={`${styles.mobileUserLink} ${styles.mobileLogout}`}
+                  onClick={() => {
+                    handleLogout();
+                    closeMobileMenu();
+                  }}
+                >
+                  <LogOut size={15} />
+                  로그아웃
                 </button>
               </div>
             ) : (
               <button className={styles.mobileLoginBtn} onClick={() => { onOpenAuth(); closeMobileMenu(); }}>
-                <User size={16} /> 로그인 / 회원가입
+                <User size={16} />
+                로그인 / 회원가입
               </button>
             )}
           </nav>
         </div>
       )}
 
-      {searchOpen && <SearchOverlay onClose={closeSearch} />}
+      {searchOpen && <SearchOverlay onClose={() => setSearchOpen(false)} />}
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Activity, Heart, ShoppingCart } from 'lucide-react';
+import { Activity, Heart, ShoppingCart, Star } from 'lucide-react';
 import Badge from '../ui/Badge';
 import ProductImageFallback from './ProductImageFallback';
 import { formatPrice } from '@/utils/formatPrice';
@@ -37,17 +37,19 @@ export default function ProductCard({
             {product.originalPrice && <Badge variant="sale">SALE</Badge>}
           </div>
 
+          <div className={styles.categoryPill}>{product.brand}</div>
+
           <div className={styles.imageWrap}>
-            <ProductImageFallback category={product.category} size={64} />
+            <ProductImageFallback category={product.category} size={72} />
           </div>
 
           <div className={styles.specsOverlay}>
             <div className={styles.specItem}>
-              <span className={styles.specLabel}>Display</span>
+              <span className={styles.specLabel}>디스플레이</span>
               <span className={styles.specValue}>{product.specs?.display?.split(',')[0] || '-'}</span>
             </div>
             <div className={styles.specItem}>
-              <span className={styles.specLabel}>CPU/칩셋</span>
+              <span className={styles.specLabel}>프로세서</span>
               <span className={styles.specValue}>{product.specs?.processor || '-'}</span>
             </div>
             <div className={styles.specItem}>
@@ -86,14 +88,29 @@ export default function ProductCard({
       </div>
 
       <Link href={`/products/${product.id}`} className={styles.info}>
-        <p className={styles.brand}>{product.brand}</p>
+        <div className={styles.metaRow}>
+          <p className={styles.brand}>{product.brand}</p>
+          <span className={styles.rating}>
+            <Star size={12} fill="currentColor" />
+            {product.rating ?? '-'}
+          </span>
+        </div>
+
         <h3 className={styles.name}>{product.name}</h3>
 
+        <p className={styles.subInfo}>
+          리뷰 {product.reviewCount?.toLocaleString?.() ?? 0}개
+          {product.stock ? ` · 재고 ${product.stock}개` : ''}
+        </p>
+
         <div className={styles.priceRow}>
-          {product.originalPrice && (
-            <span className={styles.originalPrice}>{formatPrice(product.originalPrice)}</span>
-          )}
-          <span className={styles.price}>{formatPrice(product.price)}</span>
+          <div className={styles.priceGroup}>
+            {product.originalPrice && (
+              <span className={styles.originalPrice}>{formatPrice(product.originalPrice)}</span>
+            )}
+            <span className={styles.price}>{formatPrice(product.price)}</span>
+          </div>
+          <span className={styles.ctaText}>자세히 보기</span>
         </div>
       </Link>
     </div>
