@@ -51,6 +51,20 @@
   text-align: center;
 }
 
+.entry {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.5s ease;
+  transition-delay: var(--d, 0ms);
+}
+
+.heroIn .entry {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .badge {
   align-self: center;
   display: inline-flex;
@@ -108,6 +122,32 @@
   margin-top: 4px;
 }
 
+.ctaPrimary,
+.ctaSecondary {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ctaPrimary::after,
+.ctaSecondary::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 50%, rgba(102, 252, 241, 0.32), transparent 62%);
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: -1;
+}
+
+.ctaPrimary:hover::after,
+.ctaSecondary:hover::after {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
 .secondaryBtn {
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
   color: rgba(255, 255, 255, 0.86) !important;
@@ -125,6 +165,25 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   width: 100%;
+  transform: translateY(8px);
+  opacity: 0.92;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+}
+
+.trustBadges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  transform: translateY(8px);
+  opacity: 0.92;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease;
+}
+
+.scrolled .metrics,
+.scrolled .trustBadges {
+  transform: translateY(-2px);
+  opacity: 1;
 }
 
 .metricCard {
@@ -171,13 +230,6 @@
   font-size: 0.95rem;
   font-weight: 600;
   line-height: 1.4;
-}
-
-.trustBadges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
 }
 
 .badgeItem {

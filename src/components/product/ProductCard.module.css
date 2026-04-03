@@ -1,5 +1,11 @@
 .card {
   position: relative;
+  --mx: 50%;
+  --my: 50%;
+  --rx: 0deg;
+  --ry: 0deg;
+  --ix: 0deg;
+  --iy: 0deg;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
     var(--bg-2);
@@ -15,15 +21,33 @@
     background var(--transition-smooth);
   cursor: pointer;
   height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx) var(--my), rgba(102, 252, 241, 0.24), transparent 42%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-8px) rotateX(var(--ry)) rotateY(var(--rx));
   border-color: rgba(102, 252, 241, 0.24);
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
     var(--bg-4);
   box-shadow: 0 26px 56px rgba(0, 0, 0, 0.34);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .imageArea {
@@ -40,10 +64,13 @@
   width: 100%;
   height: 100%;
   transition: transform var(--transition-smooth), filter var(--transition-smooth);
+  transform-origin: center center;
+  position: relative;
+  z-index: 1;
 }
 
 .card:hover .imageWrap {
-  transform: scale(1.08);
+  transform: perspective(900px) rotateX(var(--iy)) rotateY(var(--ix)) scale(1.08);
   filter: saturate(1.04);
 }
 
@@ -185,6 +212,7 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
 }
 
 .originalPrice {
@@ -203,7 +231,7 @@
   color: rgba(255, 255, 255, 0.52);
   font-size: 0.78rem;
   font-weight: 700;
-  transition: color var(--transition-fast), transform var(--transition-fast);
+  transition: color var(--transition-fast), transform var(--transition-fast), opacity var(--transition-fast);
 }
 
 .card:hover .ctaText {
@@ -258,6 +286,14 @@
 }
 
 @media (max-width: 768px) {
+  .card {
+    transform: none !important;
+  }
+
+  .card::before {
+    display: none;
+  }
+
   .actionsHover {
     opacity: 1;
     transform: none;
@@ -265,5 +301,29 @@
 
   .specsOverlay {
     display: none;
+  }
+}
+
+@media (hover: hover) {
+  .priceGroup {
+    opacity: 0.82;
+    transform: translateY(5px);
+  }
+
+  .ctaText {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+
+  .card:hover .priceGroup {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 80ms;
+  }
+
+  .card:hover .ctaText {
+    opacity: 1;
+    transform: translateX(2px);
+    transition-delay: 140ms;
   }
 }

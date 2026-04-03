@@ -28,8 +28,34 @@ export default function ProductCard({
     if (result?.needLogin) onNeedLogin();
   };
 
+  const handleCardMouseMove = (event) => {
+    const target = event.currentTarget;
+    const rect = target.getBoundingClientRect();
+
+    const px = ((event.clientX - rect.left) / rect.width) * 100;
+    const py = ((event.clientY - rect.top) / rect.height) * 100;
+
+    const offsetX = (event.clientX - rect.left - rect.width / 2) / rect.width;
+    const offsetY = (event.clientY - rect.top - rect.height / 2) / rect.height;
+
+    target.style.setProperty('--mx', `${px}%`);
+    target.style.setProperty('--my', `${py}%`);
+    target.style.setProperty('--rx', `${offsetX * 4}deg`);
+    target.style.setProperty('--ry', `${offsetY * -4}deg`);
+    target.style.setProperty('--ix', `${offsetX * 5}deg`);
+    target.style.setProperty('--iy', `${offsetY * -5}deg`);
+  };
+
+  const handleCardMouseLeave = (event) => {
+    const target = event.currentTarget;
+    target.style.setProperty('--rx', '0deg');
+    target.style.setProperty('--ry', '0deg');
+    target.style.setProperty('--ix', '0deg');
+    target.style.setProperty('--iy', '0deg');
+  };
+
   return (
-    <div className={styles.card}>
+    <div className={styles.card} onMouseMove={handleCardMouseMove} onMouseLeave={handleCardMouseLeave}>
       <Link href={`/products/${product.id}`} style={{ display: 'contents' }}>
         <div className={styles.imageArea}>
           <div className={styles.badges}>
