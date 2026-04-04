@@ -66,7 +66,12 @@ export default function ProductCard({
           <div className={styles.categoryPill}>{product.brand}</div>
 
           <div className={styles.imageWrap}>
-            <ProductImageFallback category={product.category} size={72} />
+            <ProductImageFallback
+              category={product.category}
+              size={72}
+              src={product.thumbnail}
+              alt={product.name}
+            />
           </div>
 
           <div className={styles.specsOverlay}>

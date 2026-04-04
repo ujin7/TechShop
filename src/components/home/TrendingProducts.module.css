@@ -1,7 +1,7 @@
 .section {
   padding: var(--space-20) 0;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .header {
@@ -85,7 +85,9 @@
   display: flex;
   gap: var(--space-6);
   overflow-x: auto;
+  padding-top: 12px;
   padding-bottom: var(--space-4);
+  margin-top: -12px;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   -ms-overflow-style: none; /* IE and Edge */

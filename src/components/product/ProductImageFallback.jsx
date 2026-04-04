@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import Image from 'next/image';
 import {
   Smartphone, Laptop, Tablet, Monitor,
   Headphones, Package, Watch, Tv,
@@ -26,9 +28,30 @@ const CATEGORY_GRADIENT = {
   accessories: 'var(--fallback-accessories)',
 };
 
-export default function ProductImageFallback({ category = '', size = 48 }) {
+export default function ProductImageFallback({
+  category = '',
+  size = 48,
+  src = '',
+  alt = 'Product image',
+}) {
+  const [imgError, setImgError] = useState(false);
   const Icon = CATEGORY_ICON[category] || Package;
   const gradient = CATEGORY_GRADIENT[category] || 'var(--fallback-default)';
+
+  if (src && !imgError) {
+    return (
+      <div className={styles.wrapper}>
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
+          className={styles.productImage}
+          onError={() => setImgError(true)}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.wrapper} style={{ '--gradient': gradient }}>

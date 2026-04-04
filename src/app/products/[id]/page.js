@@ -86,7 +86,11 @@ export default function ProductDetailPage() {
 
         {/* 상품 메인 섹션 */}
         <div className={styles.productSection}>
-          <ProductImageGallery category={product.category} productName={product.name} count={(product.images || []).length || 1} />
+          <ProductImageGallery
+            category={product.category}
+            productName={product.name}
+            images={product.images || []}
+          />
 
           <div className={styles.productInfo}>
             <p className={styles.brand}>{product.brand}</p>
@@ -218,7 +222,12 @@ export default function ProductDetailPage() {
                     transition: 'var(--transition-normal)',
                   }}>
                     <div style={{ width: '100%', aspectRatio: '1' }}>
-                      <ProductImageFallback category={p.category} size={56} />
+                      <ProductImageFallback
+                        category={p.category}
+                        size={56}
+                        src={p.thumbnail}
+                        alt={p.name}
+                      />
                     </div>
                     <div style={{ padding: '12px' }}>
                       <p style={{ fontSize: '0.75rem', color: 'var(--color-accent)', marginBottom: 4 }}>{p.brand}</p>

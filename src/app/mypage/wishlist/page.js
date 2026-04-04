@@ -53,7 +53,12 @@ export default function WishlistPage() {
           {products.filter((p) => wishlist.has(p.id)).map((product) => (
             <div key={product.id} className={styles.card}>
               <Link href={`/products/${product.id}`} className={styles.imageWrap}>
-                <ProductImageFallback category={product.category} size={48} />
+                <ProductImageFallback
+                  category={product.category}
+                  size={48}
+                  src={product.thumbnail}
+                  alt={product.name}
+                />
               </Link>
               <div className={styles.info}>
                 <p className={styles.brand}>{product.brand}</p>

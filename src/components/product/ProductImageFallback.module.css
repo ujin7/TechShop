@@ -1,11 +1,18 @@
 .wrapper {
   width: 100%;
   height: 100%;
+  position: relative;
   background: var(--gradient);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: inherit;
+  overflow: hidden;
+}
+
+.productImage {
+  object-fit: contain;
+  padding: 8px;
 }
 
 .inner {

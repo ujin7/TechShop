@@ -5,33 +5,46 @@ import { ZoomIn } from 'lucide-react';
 import ProductImageFallback from './ProductImageFallback';
 import styles from './ProductImageGallery.module.css';
 
-export default function ProductImageGallery({ category = '', productName: _productName = '', count = 1 }) {
+export default function ProductImageGallery({
+  category = '',
+  productName = '',
+  images = [],
+}) {
   const [selected, setSelected] = useState(0);
-  const thumbCount = Math.max(1, count);
+  const galleryImages = images.length > 0 ? images : [''];
+  const thumbCount = galleryImages.length;
 
   return (
     <div className={styles.gallery}>
-      {/* 썸네일 목록 */}
       {thumbCount > 1 && (
         <div className={styles.thumbList}>
-          {Array.from({ length: thumbCount }, (_, i) => (
+          {galleryImages.map((imageSrc, index) => (
             <button
-              key={i}
-              className={`${styles.thumbBtn} ${i === selected ? styles.thumbSelected : ''}`}
-              onClick={() => setSelected(i)}
-              aria-label={`이미지 ${i + 1}`}
+              key={imageSrc || index}
+              className={`${styles.thumbBtn} ${index === selected ? styles.thumbSelected : ''}`}
+              onClick={() => setSelected(index)}
+              aria-label={`이미지 ${index + 1}`}
             >
               <div className={styles.thumbImgWrap}>
-                <ProductImageFallback category={category} size={24} />
+                <ProductImageFallback
+                  category={category}
+                  size={24}
+                  src={imageSrc}
+                  alt={`${productName} ${index + 1}`}
+                />
               </div>
             </button>
           ))}
         </div>
       )}
 
-      {/* 메인 이미지 */}
       <div className={styles.mainWrapper}>
-        <ProductImageFallback category={category} size={120} />
+        <ProductImageFallback
+          category={category}
+          size={120}
+          src={galleryImages[selected]}
+          alt={productName}
+        />
         <div className={styles.zoomHint}>
           <ZoomIn size={18} />
         </div>

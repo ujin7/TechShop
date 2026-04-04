@@ -68,7 +68,7 @@ export default function ClientLayout({ children, categories }) {
         user={user}
         onLogout={logout}
       />
-      <main style={{ paddingTop: 'var(--navbar-height)' }}>
+      <main>
         {children}
       </main>
       <Footer />
